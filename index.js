@@ -78,7 +78,7 @@ async function run() {
     })
 
 
-    //add to cart related apis
+   
 
     app.get('/cart',async(req,res)=>{
       const cursor=addToCartCollection.find();
