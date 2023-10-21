@@ -33,6 +33,7 @@ async function run() {
     await client.connect();
 
     const carCollection=client.db('carDB').collection('car')
+    const addToCartCollection=client.db('carDB').collection('cart');
 
     app.get('/cars',async(req,res)=>{
         const cursor = carCollection.find();
@@ -73,6 +74,32 @@ async function run() {
         }
       }
       const result = await carCollection.updateOne(filter,car,options);
+      res.send(result);
+    })
+
+
+    //add to cart related apis
+
+    app.get('/cart',async(req,res)=>{
+      const cursor=addToCartCollection.find();
+      const cart=await cursor.toArray();
+      res.send(cart);
+    })
+
+ 
+
+    app.post('/cart',async(req,res)=>{
+      const cart =req.body;
+      console.log(cart);
+      const result= await addToCartCollection.insertOne(cart);
+      res.send(result);
+    })
+
+    app.delete('/cart/:id',async(req,res)=>{
+      const id = req.params.id;
+      console.log(id);
+      const query= { _id: id}
+      const result= await addToCartCollection.deleteOne(query);
       res.send(result);
     })
 
